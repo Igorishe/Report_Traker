@@ -1,9 +1,15 @@
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-mlq4(%vw2=xwv!%+j=#l722%qtxga02f$&c+ap#k-(6!n&+hda'
+SECRET_KEY = os.getenv('SECRET_TOKEN')
 
 DEBUG = True
 
