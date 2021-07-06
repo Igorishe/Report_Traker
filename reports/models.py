@@ -12,17 +12,20 @@ class Report(models.Model):
         FORGOTTEN = 'Forgotten'
 
     text = models.TextField(
-        verbose_name='Текст',
-        help_text='Пункт текста отчета'
+        verbose_name='Текст репорта',
+        help_text='Пункт отчета',
     )
     date = models.DateTimeField(
         "date published",
         auto_now_add=True
     )
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="reports"
+    author = models.PositiveIntegerField(
+        verbose_name='Автор репорта',
+    )
+    author_name = models.CharField(
+        max_length=20,
+        verbose_name='Логин автора',
+        blank=True,
     )
     status = models.CharField(
         max_length=12,
@@ -32,7 +35,9 @@ class Report(models.Model):
     )
 
     class Meta:
+        verbose_name = 'Отчет'
+        verbose_name_plural = 'Отчеты'
         ordering = ["-date"]
 
     def __str__(self):
-        return self.text[:10]
+        return self.text[:12]
