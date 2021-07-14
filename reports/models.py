@@ -16,7 +16,7 @@ class Report(models.Model):
         help_text='Пункт отчета',
     )
     date = models.DateTimeField(
-        "date published",
+        'Дата создания',
         auto_now_add=True
     )
     author = models.PositiveIntegerField(
@@ -29,7 +29,7 @@ class Report(models.Model):
     )
     status = models.CharField(
         max_length=12,
-        verbose_name='Status',
+        verbose_name='Статус',
         choices=Statuses.choices,
         default=Statuses.NORMAL,
     )
@@ -37,7 +37,7 @@ class Report(models.Model):
     class Meta:
         verbose_name = 'Отчет'
         verbose_name_plural = 'Отчеты'
-        ordering = ["-date"]
+        ordering = ['-date']
 
     def __str__(self):
         return self.text[:12]
