@@ -7,9 +7,9 @@ from .parse_functions import parse_report
 
 load_dotenv()
 
-jwt_token = os.getenv('jwt_token')
-refresh_token = os.getenv('jwt_refresh')
-
+api_token = os.getenv('api_token')
+api_host = '127.0.0.1'
+api_port = '8000'
 
 def format_result(result):
     """Format API response for telegram rendering"""
@@ -34,12 +34,13 @@ def format_result(result):
 
 def show_all(message, bot):
     """Get reports list from Traker API"""
-    reports_status = str(message.text)
+    report_status = str(message.text)
     try:
         reports = requests.get(
-            url=f'http://127.0.0.1:8000/api/v1/report/?status={reports_status}',
+            url=f'http://{api_host}:{api_port}/api/v1/report/'
+                f'?status={report_status}',
             headers={
-                'Authorization': f'Bearer {jwt_token}',
+                'Authorization': f'Token {api_token}',
             }
         )
         if reports.status_code == 200:
@@ -78,9 +79,9 @@ def report_save(message, bot):
         to_save.append(obj_to_save)
     try:
         request = requests.post(
-            url='http://127.0.0.1:8000/api/v1/report/',
+            url=f'http://{api_host}:{api_port}/api/v1/report/',
             headers={
-                'Authorization': f'Bearer {jwt_token}',
+                'Authorization': f'Token {api_token}',
             },
             json=to_save,
         )
