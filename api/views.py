@@ -10,7 +10,7 @@ class ReportList(generics.ListCreateAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-    filterset_fields = ['status', ]
+    filterset_fields = ['status', 'tag', ]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, many=True)

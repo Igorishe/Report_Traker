@@ -7,9 +7,9 @@ from .parse_functions import parse_report
 
 load_dotenv()
 
-jwt_token = os.getenv('jwt_token')
-refresh_token = os.getenv('jwt_refresh')
-
+api_token = os.getenv('api_token')
+api_host = '127.0.0.1'
+api_port = '8000'
 
 def format_result(result):
     """Format API response for telegram rendering"""
@@ -18,11 +18,13 @@ def format_result(result):
         text = item['text']
         date = item['date']
         status = item['status']
+        tag = item['tag']
         author = item['author_name']
         line = (
             f'Кейс: {text}\n'
             f'<code>Дата: {date}</code>\n'
             f'Статус: <b>{status}</b>\n'
+            f'Тэг: <b>{tag}</b>\n'
             f'Автор: {author}\n'
             '\n'
         )
@@ -32,14 +34,15 @@ def format_result(result):
     return output
 
 
-def show_all(message, bot):
+def show_all(message, bot, filtered):
     """Get reports list from Traker API"""
-    reports_status = str(message.text)
+    report_status = str(message.text)
     try:
         reports = requests.get(
-            url=f'http://127.0.0.1:8000/api/v1/report/?status={reports_status}',
+            url=f'http://{api_host}:{api_port}/api/v1/report/'
+                f'?{filtered}={report_status}',
             headers={
-                'Authorization': f'Bearer {jwt_token}',
+                'Authorization': f'Token {api_token}',
             }
         )
         if reports.status_code == 200:
@@ -78,16 +81,22 @@ def report_save(message, bot):
         to_save.append(obj_to_save)
     try:
         request = requests.post(
-            url='http://127.0.0.1:8000/api/v1/report/',
+            url=f'http://{api_host}:{api_port}/api/v1/report/',
             headers={
-                'Authorization': f'Bearer {jwt_token}',
+                'Authorization': f'Token {api_token}',
             },
             json=to_save,
         )
-        bot.send_message(
-            message.from_user.id,
-            request.status_code,
-        )
+        if request.status_code == 201:
+            bot.send_message(
+                message.from_user.id,
+                'Отчет успешно записался',
+            )
+        elif request.status_code == 401:
+            bot.send_message(
+                message.from_user.id,
+                'Ошибка авторизации, проверьте токен',
+            )
     except requests.exceptions.ConnectionError:
         bot.send_message(
             message.from_user.id,

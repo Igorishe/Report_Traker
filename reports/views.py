@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
+from telegram.tasks import send_notify
+
+
+def index(request):
+    send_notify.delay('It works!')
+    return JsonResponse({"success": True})
