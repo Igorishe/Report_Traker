@@ -6,10 +6,15 @@ User = get_user_model()
 
 class Report(models.Model):
     class Statuses(models.TextChoices):
-        NORMAL = 'Normal'
+        NEW = 'New'
         CLOSED = 'Closed'
-        URGENT = 'Urgent'
+        ACTUAL = 'Actual'
+
+    class Tags(models.TextChoices):
+        NORMAL = 'Normal'
+        BURNING = 'Burning'
         FORGOTTEN = 'Forgotten'
+        DELAYED = 'Delayed'
 
     text = models.TextField(
         verbose_name='Текст репорта',
@@ -31,7 +36,13 @@ class Report(models.Model):
         max_length=12,
         verbose_name='Статус',
         choices=Statuses.choices,
-        default=Statuses.NORMAL,
+        default=Statuses.NEW,
+    )
+    tag = models.CharField(
+        max_length=12,
+        verbose_name='Тэг',
+        choices=Tags.choices,
+        default=Tags.NORMAL,
     )
 
     class Meta:

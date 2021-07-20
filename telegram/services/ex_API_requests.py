@@ -18,11 +18,13 @@ def format_result(result):
         text = item['text']
         date = item['date']
         status = item['status']
+        tag = item['tag']
         author = item['author_name']
         line = (
             f'Кейс: {text}\n'
             f'<code>Дата: {date}</code>\n'
             f'Статус: <b>{status}</b>\n'
+            f'Тэг: <b>{tag}</b>\n'
             f'Автор: {author}\n'
             '\n'
         )
@@ -32,13 +34,13 @@ def format_result(result):
     return output
 
 
-def show_all(message, bot):
+def show_all(message, bot, filtered):
     """Get reports list from Traker API"""
     report_status = str(message.text)
     try:
         reports = requests.get(
             url=f'http://{api_host}:{api_port}/api/v1/report/'
-                f'?status={report_status}',
+                f'?{filtered}={report_status}',
             headers={
                 'Authorization': f'Token {api_token}',
             }
@@ -85,10 +87,16 @@ def report_save(message, bot):
             },
             json=to_save,
         )
-        bot.send_message(
-            message.from_user.id,
-            request.status_code,
-        )
+        if request.status_code == 201:
+            bot.send_message(
+                message.from_user.id,
+                'Отчет успешно записался',
+            )
+        elif request.status_code == 401:
+            bot.send_message(
+                message.from_user.id,
+                'Ошибка авторизации, проверьте токен',
+            )
     except requests.exceptions.ConnectionError:
         bot.send_message(
             message.from_user.id,

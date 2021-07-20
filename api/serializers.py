@@ -8,4 +8,4 @@ class ReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Report
-        fields = ('text', 'author', 'author_name', 'date', 'status')
+        fields = ('text', 'author', 'author_name', 'date', 'status', 'tag')
