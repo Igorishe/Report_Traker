@@ -1,11 +1,13 @@
 from datetime import timedelta, datetime
 
+from django.utils import timezone
+
 from .models import Report
 from traker.celery import app
 
 
 def update_reports(period, status=None, tag=None):
-    lookup_date = datetime.now() - timedelta(hours=period)
+    lookup_date = timezone.now() - timedelta(hours=period)
     if status:
         key = 'status'
         value = status

@@ -16,10 +16,10 @@ app.conf.beat_schedule = {
     },
     'update-statuses': {
         'task': 'reports.tasks.update_statuses',
-        'schedule': crontab(minute=57, hour=13),
+        'schedule': crontab(minute=22, hour=14),
     },
     'update-tags': {
         'task': 'reports.tasks.update_tags',
-        'schedule': crontab(minute=58, hour=13),
+        'schedule': crontab(minute=23, hour=14),
     },
 }

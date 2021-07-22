@@ -10,6 +10,7 @@ load_dotenv()
 admin_id = os.getenv('admin_telegram')
 token = os.getenv('bot_token')
 
+
 @app.task
 def send_notify(text):
     send_message(
