@@ -2,8 +2,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 import django_filters.rest_framework
 
-from reports.models import Report
-from .serializers import ReportSerializer
+from reports.models import Report, MobinetReport
+from .serializers import ReportSerializer, MobinetReportSerializer
 
 
 class ReportList(generics.ListCreateAPIView):
@@ -19,3 +19,8 @@ class ReportList(generics.ListCreateAPIView):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED,
                         headers=headers)
+
+
+class MobinetReportList(ReportList):
+    queryset = MobinetReport.objects.all()
+    serializer_class = MobinetReportSerializer

@@ -46,9 +46,15 @@ class Report(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Отчет'
-        verbose_name_plural = 'Отчеты'
+        verbose_name = 'Отчет RS'
+        verbose_name_plural = 'Отчеты RS'
         ordering = ['-date']
 
     def __str__(self):
         return self.text[:12]
+
+
+class MobinetReport(Report):
+    class Meta:
+        verbose_name = 'Отчет MN'
+        verbose_name_plural = 'Отчеты MN'
