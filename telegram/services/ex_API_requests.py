@@ -12,12 +12,12 @@ api_host = '127.0.0.1'
 api_port = '8000'
 
 
-def show_all(message, bot, filtered):
+def show_all(message, bot, filtered, current_url):
     """Get reports list from Traker API"""
     report_status = str(message.text)
     try:
         reports = requests.get(
-            url=f'http://{api_host}:{api_port}/api/v1/report/'
+            url=f'http://{api_host}:{api_port}/api/v1/{current_url}/'
                 f'?{filtered}={report_status}',
             headers={
                 'Authorization': f'Token {api_token}',
@@ -43,12 +43,12 @@ def show_all(message, bot, filtered):
         )
 
 
-def report_save(message, bot):
+def report_save(message, bot, current_url):
     """Post new report to Traker base"""
     to_save = format_to_save(message)
     try:
         request = requests.post(
-            url=f'http://{api_host}:{api_port}/api/v1/report/',
+            url=f'http://{api_host}:{api_port}/api/v1/{current_url}/',
             headers={
                 'Authorization': f'Token {api_token}',
             },
