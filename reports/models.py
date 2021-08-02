@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Report(models.Model):
+class ParentReport(models.Model):
     class Statuses(models.TextChoices):
         NEW = 'New'
         CLOSED = 'Closed'
@@ -26,6 +26,7 @@ class Report(models.Model):
     )
     author = models.PositiveIntegerField(
         verbose_name='Автор репорта',
+        blank=True,
     )
     author_name = models.CharField(
         max_length=20,
@@ -46,15 +47,20 @@ class Report(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Отчет RS'
-        verbose_name_plural = 'Отчеты RS'
+        abstract = True
         ordering = ['-date']
 
     def __str__(self):
         return self.text[:12]
 
 
-class MobinetReport(Report):
+class Report(ParentReport):
+    class Meta:
+        verbose_name = 'Отчет RS'
+        verbose_name_plural = 'Отчеты RS'
+
+
+class MobinetReport(ParentReport):
     class Meta:
         verbose_name = 'Отчет MN'
         verbose_name_plural = 'Отчеты MN'
