@@ -64,3 +64,29 @@ class MobinetReport(ParentReport):
     class Meta:
         verbose_name = 'Отчет MN'
         verbose_name_plural = 'Отчеты MN'
+
+
+class ParentMoneyback(ParentReport):
+    value = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Сумма возврата',
+    )
+    wallet = models.CharField(
+        max_length=50,
+        verbose_name='Кошелек получателя',
+        blank=True,
+    )
+    link = models.CharField(
+        max_length=50,
+        verbose_name='Ссылка на пользователя',
+    )
+
+    class Meta:
+        abstract = True
+
+
+class MoneyBack(ParentMoneyback):
+    class Meta:
+        verbose_name = 'Возврат'
+        verbose_name_plural = 'Возвраты'
