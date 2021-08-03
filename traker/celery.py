@@ -12,14 +12,14 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'notify-every-minute': {
         'task': 'telegram.tasks.send_beat_notify',
-        'schedule': crontab(minute=20, hour=13),
+        'schedule': crontab(minute=27, hour=14),
     },
     'update-statuses': {
         'task': 'reports.tasks.update_statuses',
-        'schedule': crontab(minute=22, hour=13),
+        'schedule': crontab(minute=27, hour=14),
     },
     'update-tags': {
         'task': 'reports.tasks.update_tags',
-        'schedule': crontab(minute=21, hour=13),
+        'schedule': crontab(minute=27, hour=14),
     },
 }

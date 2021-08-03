@@ -1,12 +1,14 @@
+import django_filters.rest_framework
 from rest_framework import generics, status
 from rest_framework.response import Response
-import django_filters.rest_framework
 
-from reports.models import Report, MobinetReport
-from .serializers import ReportSerializer, MobinetReportSerializer
+from reports.models import Report, MobinetReport, MoneyBack
+from .serializers import (ReportSerializer,
+                          MobinetReportSerializer,
+                          MoneybackSerializer)
 
 
-class ReportList(generics.ListCreateAPIView):
+class ReportList(generics.ListCreateAPIView, generics.UpdateAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
@@ -24,3 +26,8 @@ class ReportList(generics.ListCreateAPIView):
 class MobinetReportList(ReportList):
     queryset = MobinetReport.objects.all()
     serializer_class = MobinetReportSerializer
+
+
+class MoneybackAPIView(ReportList):
+    queryset = MoneyBack.objects.all()
+    serializer_class = MoneybackSerializer

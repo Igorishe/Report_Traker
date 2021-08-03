@@ -1,17 +1,29 @@
 from rest_framework import serializers
 
-from reports.models import Report, MobinetReport
+from reports.models import Report, MobinetReport, MoneyBack
 
 
 class ReportSerializer(serializers.ModelSerializer):
     date = serializers.DateTimeField(format='%Y-%m-%d', required=False)
+    id = serializers.IntegerField(source='pk')
 
     class Meta:
         model = Report
-        fields = ('text', 'author', 'author_name', 'date', 'status', 'tag')
+        fields = ('id', 'text', 'author', 'author_name', 'date', 'status',
+                  'tag')
 
 
 class MobinetReportSerializer(ReportSerializer):
     class Meta:
         model = MobinetReport
-        fields = ('text', 'author', 'author_name', 'date', 'status', 'tag')
+        fields = ('id', 'text', 'author', 'author_name', 'date', 'status',
+                  'tag')
+
+
+class MoneybackSerializer(ReportSerializer):
+    wallet = serializers.CharField(required=False)
+
+    class Meta:
+        model = MoneyBack
+        fields = ('id', 'text', 'author', 'author_name', 'date', 'status',
+                  'tag', 'value', 'wallet', 'link')

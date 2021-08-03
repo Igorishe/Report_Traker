@@ -49,8 +49,8 @@ def start(message):
 def check(message):
     """Shows reports filtered by status"""
     urls = {
-        '/status': 'report',
-        '/status_mn': 'mn-report'
+        '/status': 'reports',
+        '/status_mn': 'mn-reports'
     }
     current_url = urls[message.text]
     sent = bot.send_message(
@@ -65,8 +65,8 @@ def check(message):
 def check_tags(message):
     """Shows reports filtered by status"""
     urls = {
-        '/tags': 'report',
-        '/tags_mn': 'mn-report'
+        '/tags': 'reports',
+        '/tags_mn': 'mn-reports'
     }
     current_url = urls[message.text]
     sent = bot.send_message(
@@ -81,8 +81,8 @@ def check_tags(message):
 def post_report(message):
     """Save new report"""
     urls = {
-        f'{chat}': 'report',
-        f'{second_chat}': 'mn-report',
+        f'{chat}': 'reports',
+        f'{second_chat}': 'mn-reports',
     }
     current_chat = str(message.chat.id)
     current_url = urls[current_chat]
