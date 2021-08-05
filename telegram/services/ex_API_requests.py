@@ -8,7 +8,7 @@ from .format_functions import format_result, format_to_save
 load_dotenv()
 
 api_token = os.getenv('api_token')
-api_host = '127.0.0.1'
+api_host = '0.0.0.0'
 api_port = '8000'
 
 

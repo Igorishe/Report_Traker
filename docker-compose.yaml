@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   redis:
     image: redis
@@ -12,8 +12,8 @@ services:
     restart: always
     container_name: 'traker'
     command:
-      - python manage.py runserver 127.0.0.1:8000
-      - python manage.py runbot
+      - python3 manage.py runserver 0.0.0.0:8000
+      - python3 manage.py runbot
     volumes:
       - static_value:/code/static/
       - media_value:/code/media/
