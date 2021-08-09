@@ -5,7 +5,7 @@ from reports.models import Report, MobinetReport, MoneyBack
 
 class ReportSerializer(serializers.ModelSerializer):
     date = serializers.DateTimeField(format='%Y-%m-%d', required=False)
-    id = serializers.IntegerField(source='pk')
+    id = serializers.IntegerField(source='pk', required=False)
 
     class Meta:
         model = Report
