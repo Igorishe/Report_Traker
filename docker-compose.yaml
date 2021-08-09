@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.3'
 services:
   db:
     image: postgres:12.4
@@ -11,7 +11,7 @@ services:
     build: .
     restart: always
     container_name: 'traker'
-    command: python manage.py runserver 0:8000
+    command: gunicorn traker.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_value:/code/static/
       - media_value:/code/media/
