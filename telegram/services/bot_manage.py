@@ -9,10 +9,12 @@ from .keyboard_services import status_keyboard, tag_keyboard
 load_dotenv()
 
 token = os.getenv('bot_token')
-chat = int(os.getenv('bot_chat'))
+rs_chat = int(os.getenv('bot_chat'))
 second_chat = int(os.getenv('second_bot_chat'))
+admin_id = int(os.getenv('admin_telegram'))
 
-allowed_chats = [chat, second_chat]
+allowed_chats = [rs_chat, second_chat]
+allowed_users = [int(i) for i in os.getenv('allowed_users').split(',')]
 
 bot = telebot.TeleBot(token)
 
@@ -22,16 +24,26 @@ def group_access_check(message):
     return message.chat.id in allowed_chats
 
 
-@bot.message_handler(commands=['group'])
+def user_access_check(message):
+    """Access to function only from certain user"""
+    return message.from_user.id in allowed_users
+
+
+def admin_access_check(message):
+    """Access to function only from admin user"""
+    return message.from_user.id == admin_id
+
+
+@bot.message_handler(func=admin_access_check, commands=['group'])
 def show_group(message):
     """Shows tg group id"""
     bot.send_message(
-        message.chat.id,
+        admin_id,
         message.chat.id,
     )
 
 
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(func=user_access_check, commands=['start', 'help'])
 def start(message):
     """Greeting message"""
     bot.send_message(
@@ -45,7 +57,7 @@ def start(message):
     )
 
 
-@bot.message_handler(commands=['status', 'status_mn'])
+@bot.message_handler(func=user_access_check, commands=['status', 'status_mn'])
 def check(message):
     """Shows reports filtered by status"""
     urls = {
@@ -61,7 +73,7 @@ def check(message):
     bot.register_next_step_handler(sent, show_all, bot, 'status', current_url)
 
 
-@bot.message_handler(commands=['tags', 'tags_mn'])
+@bot.message_handler(func=user_access_check, commands=['tags', 'tags_mn'])
 def check_tags(message):
     """Shows reports filtered by status"""
     urls = {
@@ -81,7 +93,7 @@ def check_tags(message):
 def post_report(message):
     """Save new report"""
     urls = {
-        f'{chat}': 'reports',
+        f'{rs_chat}': 'reports',
         f'{second_chat}': 'mn-reports',
     }
     current_chat = str(message.chat.id)
