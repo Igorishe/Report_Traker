@@ -32,7 +32,7 @@ def report_count(queryset):
 
 @app.task
 def send_notify():
-    reports = Report.objects.all()
+    reports = Report.objects.all().exclude(status='Closed')
     output = report_count(reports)
     send_message(
         token,
@@ -44,7 +44,7 @@ def send_notify():
 
 @app.task
 def send_beat_notify():
-    reports = Report.objects.all()
+    reports = Report.objects.all().exclude(status='Closed')
     output = report_count(reports)
     for user in notify_users:
         send_message(
@@ -52,4 +52,16 @@ def send_beat_notify():
             user,
             output,
             parse_mode='HTML',
+        )
+
+
+@app.task
+def burning_notify():
+    reports = Report.objects.filter(tag='Burning').exclude(status='Closed')
+    output = reports.count()
+    for user in notify_users:
+        send_message(
+            token,
+            user,
+            f'Внимание! Сейчас в работе {output} срочных кейсов!'
         )
