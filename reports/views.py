@@ -4,5 +4,5 @@ from telegram.tasks import send_notify
 
 
 def index(request):
-    send_notify.delay('It works!')
-    return JsonResponse({"success": True})
+    send_notify.delay()
+    return JsonResponse({'success': True})

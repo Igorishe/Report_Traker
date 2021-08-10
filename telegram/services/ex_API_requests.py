@@ -7,6 +7,7 @@ from .format_functions import format_result, format_to_save
 
 load_dotenv()
 
+admin_id = int(os.getenv('admin_telegram'))
 api_token = os.getenv('api_token')
 api_host = 'web'
 api_port = '8000'
@@ -56,16 +57,16 @@ def report_save(message, bot, current_url):
         )
         if request.status_code == 201:
             bot.send_message(
-                message.from_user.id,
+                admin_id,
                 'Отчет успешно записался',
             )
         elif request.status_code == 401:
             bot.send_message(
-                message.from_user.id,
+                admin_id,
                 'Ошибка авторизации, проверьте токен',
             )
     except requests.exceptions.ConnectionError:
         bot.send_message(
-            message.from_user.id,
+            admin_id,
             'Ошибка соединения с сервером',
         )

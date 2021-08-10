@@ -21,6 +21,8 @@ def format_result(result):
         output += line
     if not output:
         return 'Эта категория пуста'
+    if len(output) > 4096:
+        return output[:4096]
     return output
 
 

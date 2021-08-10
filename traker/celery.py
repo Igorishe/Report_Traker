@@ -10,16 +10,16 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
-    'notify-every-minute': {
+    'notify-every-morning': {
         'task': 'telegram.tasks.send_beat_notify',
-        'schedule': crontab(minute=27, hour=14),
+        'schedule': crontab(minute=0, hour=8, day_of_week='mon-fri'),
     },
     'update-statuses': {
         'task': 'reports.tasks.update_statuses',
-        'schedule': crontab(minute=27, hour=14),
+        'schedule': crontab(minute=0, hour=15),
     },
     'update-tags': {
         'task': 'reports.tasks.update_tags',
-        'schedule': crontab(minute=27, hour=14),
+        'schedule': crontab(minute=0, hour=15),
     },
 }
