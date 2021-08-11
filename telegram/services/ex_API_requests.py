@@ -9,7 +9,7 @@ load_dotenv()
 
 admin_id = int(os.getenv('admin_telegram'))
 api_token = os.getenv('api_token')
-api_host = 'web'
+api_host = os.getenv('api_host')
 api_port = '8000'
 
 

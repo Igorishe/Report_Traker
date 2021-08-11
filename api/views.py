@@ -9,7 +9,7 @@ from .serializers import (ReportSerializer,
 
 
 class ReportList(generics.ListCreateAPIView, generics.UpdateAPIView):
-    queryset = Report.objects.all()
+    queryset = Report.objects.all().exclude(status='Closed')
     serializer_class = ReportSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_fields = ['status', 'tag', ]
@@ -24,10 +24,10 @@ class ReportList(generics.ListCreateAPIView, generics.UpdateAPIView):
 
 
 class MobinetReportList(ReportList):
-    queryset = MobinetReport.objects.all()
+    queryset = MobinetReport.objects.all().exclude(status='Closed')
     serializer_class = MobinetReportSerializer
 
 
 class MoneybackAPIView(ReportList):
-    queryset = MoneyBack.objects.all()
+    queryset = MoneyBack.objects.all().exclude(status='Closed')
     serializer_class = MoneybackSerializer

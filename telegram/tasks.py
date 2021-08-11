@@ -59,9 +59,10 @@ def send_beat_notify():
 def burning_notify():
     reports = Report.objects.filter(tag='Burning').exclude(status='Closed')
     output = reports.count()
-    for user in notify_users:
-        send_message(
-            token,
-            user,
-            f'Внимание! Сейчас в работе {output} срочных кейсов!'
-        )
+    if output > 0:
+        for user in notify_users:
+            send_message(
+                token,
+                user,
+                f'Внимание! Сейчас в работе {output} срочных кейсов!'
+            )
