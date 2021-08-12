@@ -13,13 +13,18 @@ api_host = os.getenv('api_host')
 api_port = '8000'
 
 
-def show_all(message, bot, filtered, current_url):
+def show_all(message, bot, current_url, filtered=None):
     """Get reports list from Traker API"""
-    report_status = str(message.text)
+    root_url = f'http://{api_host}:{api_port}/api/v1/{current_url}/'
+    if filtered:
+        report_status = str(message.text)
+        filter_url = f'?{filtered}={report_status}'
+        url = root_url + filter_url
+    else:
+        url = root_url
     try:
         reports = requests.get(
-            url=f'http://{api_host}:{api_port}/api/v1/{current_url}/'
-                f'?{filtered}={report_status}',
+            url=url,
             headers={
                 'Authorization': f'Token {api_token}',
             }
