@@ -3,7 +3,7 @@ import os
 import telebot
 from dotenv import load_dotenv
 
-from .ex_API_requests import show_all, report_save
+from .ex_API_requests import report_save, show_all
 from .keyboard_services import status_keyboard, tag_keyboard
 
 load_dotenv()

@@ -1,9 +1,7 @@
 from django.urls import path
 from rest_framework.authtoken import views
 
-
-from .views import ReportList, MobinetReportList, MoneybackAPIView
-
+from .views import MobinetReportList, MoneybackAPIView, ReportList
 
 urlpatterns = [
     path('auth/', views.obtain_auth_token),

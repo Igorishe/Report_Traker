@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from reports.models import Report, MobinetReport, MoneyBack
+from reports.models import MobinetReport, MoneyBack, Report
 
 
 class ReportSerializer(serializers.ModelSerializer):

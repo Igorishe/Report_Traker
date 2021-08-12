@@ -1,9 +1,9 @@
 import os
 
 from dotenv import load_dotenv
-from reports.models import Report
 from telebot.apihelper import send_message
 
+from reports.models import Report
 from traker.celery import app
 
 load_dotenv()

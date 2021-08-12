@@ -1,9 +1,10 @@
-from datetime import timedelta, datetime
+from datetime import timedelta
 
 from django.utils import timezone
 
-from .models import Report
 from traker.celery import app
+
+from .models import Report
 
 
 def update_reports(period, status=None, tag=None):

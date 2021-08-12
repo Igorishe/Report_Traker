@@ -1,1 +1,0 @@
-docker run --rm -v postgres_data:/volume -v /tmp:/backup postgres:12.4 sh -c "rm -rf /volume/* /volume/..?* /volume/.[!.]* ; tar -C /volume/ -xf /backup/test_archive.tar"

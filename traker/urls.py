@@ -1,18 +1,17 @@
-from django.contrib import admin
-from django.urls import path, include
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 from django.conf.urls import url
-
+from django.contrib import admin
+from django.urls import include, path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
-      title="Traker API",
-      default_version='v1',
-      description="Документация для Traker API",
-      contact=openapi.Contact(email="admin@traker.ru"),
-      license=openapi.License(name="MIT License"),
+        title='TrakerAPI',
+        default_version='v1',
+        description='Документация для Traker API',
+        contact=openapi.Contact(email='admin@traker.ru'),
+        license=openapi.License(name='MIT License'),
     ),
     public=False,
     permission_classes=[permissions.AllowAny],

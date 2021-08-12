@@ -1,7 +1,7 @@
 from django.contrib import admin, messages
 from django.utils.translation import ngettext
 
-from .models import Report, MobinetReport, MoneyBack
+from .models import MobinetReport, MoneyBack, Report
 
 
 @admin.register(Report)
