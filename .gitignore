@@ -132,3 +132,10 @@ dmypy.json
 #Dev docker
 docker-compose.dev.yaml
 docker-compose.dev2.yaml
+
+# coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
