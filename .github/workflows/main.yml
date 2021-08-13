@@ -13,8 +13,8 @@ jobs:
         db: [postgres]
         python-version: [3.8]
         include:
-          - db: ${{ secrets.DB_NAME }}
-            db_port: ${{ secrets.DB_PORT }}
+          - db: postgres
+            db_port: 5432
 
     services:
       postgres:
@@ -23,7 +23,7 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         ports:
-          - ${{ secrets.DB_PORT }}:${{ secrets.DB_PORT }}
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v2
