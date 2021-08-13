@@ -25,5 +25,5 @@ jobs:
         run: |
           python -m flake8
           python manage.py test
-        with:
+        env:
           SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
