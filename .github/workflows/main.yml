@@ -41,6 +41,14 @@ jobs:
       - name: Test with flake8 and django tests
         env:
           SECRET_TOKEN: ${{ secrets.SECRET_TOKEN }}
+          api_token: ${{ secrets.API_TOKEN }}
+          api_host: ${{ secrets.API_HOST }}
+          bot_token: ${{ secrets.BOT_TOKEN }}
+          bot_chat: ${{ secrets.BOT_CHAT }}
+          second_bot_chat: ${{ secrets.SECOND_BOT_CHAT }}
+          admin_telegram: ${{ secrets.ADMIN_TELEGRAM }}
+          moderator_telegram: ${{ secrets.MODERATOR_TELEGRAM }}
+          allowed_users: ${{ secrets.ALLOWED_USERS }}
           DB_ENGINE: ${{ secrets.DB_ENGINE }}
           DB_NAME: ${{ secrets.DB_NAME }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
