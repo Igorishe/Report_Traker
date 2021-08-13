@@ -1,5 +1,6 @@
 from django.test import TestCase
-from reports.models import Report, MobinetReport, MoneyBack
+
+from reports.models import MobinetReport, MoneyBack, Report
 
 
 class ReportModelTest(TestCase):
