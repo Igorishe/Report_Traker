@@ -58,3 +58,31 @@ jobs:
         run: |
           python -m flake8
           python manage.py test
+  deploy:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd Report_Traker
+            git pull
+            sudo docker-compose down
+            sudo docker-compose up -d --build
+            sudo docker-compose exec -d web python manage.py migrate --noinput
+            sudo docker image prune -f
+  send_message:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: send message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: ${{ github.workflow }} успешно выполнен!
