@@ -1,14 +1,29 @@
 from django.contrib import admin, messages
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext
 
 from .models import MobinetReport, MoneyBack, Report
+
+
+class IsClosedListFilter(admin.SimpleListFilter):
+    title = _('Только открытые вопросы')
+    parameter_name = 'is-status-closed'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('opened', _('Открытые')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'opened':
+            return queryset.exclude(status='Closed')
 
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('text', 'date', 'author', 'status', 'tag')
     search_fields = ('status', 'tag', 'author', 'date')
-    list_filter = ('author', 'date', 'status', 'tag')
+    list_filter = ('author', 'date', 'status', 'tag', IsClosedListFilter)
     actions = ['make_closed', 'make_delayed']
 
     @admin.action(description='Закрыть кейс')
@@ -41,4 +56,6 @@ class MoneyBackAdmin(ReportAdmin):
         'text', 'value', 'wallet', 'date', 'author', 'status', 'tag', 'link'
     )
     search_fields = ('status', 'tag', 'author', 'date', 'link')
-    list_filter = ('author', 'date', 'status', 'tag', 'value')
+    list_filter = (
+        'author', 'date', 'status', 'tag', 'value', IsClosedListFilter
+    )
