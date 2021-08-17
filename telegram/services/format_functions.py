@@ -1,6 +1,5 @@
 from .parse_functions import parse_report
 
-
 tags_emoji = {
     'Normal': '\ud83c\udd97 ',
     'Burning': '\ud83d\udd25 ',
@@ -17,7 +16,8 @@ status_emoji = {
 
 def decode_surrogates(string):
     return string.encode(
-            'utf-16', 'surrogatepass').decode('utf-16', 'surrogatepass')
+        'utf-16', 'surrogatepass').decode(
+        'utf-16', 'surrogatepass')
 
 
 def format_result(result):

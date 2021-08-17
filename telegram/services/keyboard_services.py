@@ -1,6 +1,6 @@
 from telebot import types
 
-from .format_functions import tags_emoji, status_emoji
+from .format_functions import status_emoji, tags_emoji
 
 
 def status_keyboard():
