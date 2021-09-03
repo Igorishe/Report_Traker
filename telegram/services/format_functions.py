@@ -65,5 +65,7 @@ def format_to_save(message):
         if report.startswith('!!!'):
             obj_to_save['text'] = report[3:]
             obj_to_save['tag'] = 'Burning'
+        if 'передать' in report.lower() and 'нечего' in report.lower():
+            obj_to_save['status'] = 'Closed'
         to_save.append(obj_to_save)
     return to_save
