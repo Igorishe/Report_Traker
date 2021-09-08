@@ -1,6 +1,6 @@
-# Report_Tra~~C~~ker
+# RTraker
 
-Django app for support reports. Helps to customer service manager to track all long lasting cases. 
+RTraker is a support reports tracker. It is Django driven app that helps to customer service manager to track all long lasting cases. 
 
 Support specialists send daily reports to special telegram-chat. Tracker bot parse it and save in database (Postgres) with appropriate status and tag.
 
@@ -12,7 +12,9 @@ Bot and django app interact via API (running on DRF).
 
 Celery tasks update statuses every day and send special notifications to admin and moderator. Redis works as Celery message broker.
 
-Project also includes nginx configuration, docker & docker-compose files and github-workflows file for CI-CD settings.
+Project also includes nginx configuration, docker & docker-compose files.
+
+Also you can use ready CI-CD flow (auto tests, deploy and success notification) with Github Actions (main.yml file).
 
 ## Deploy RTra~~C~~ker to Debian-server
 
