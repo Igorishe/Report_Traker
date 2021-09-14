@@ -26,6 +26,7 @@ Env file includes:
 * bot_token - telegram-bot token from BotFather;
 * bot_chat - daily reports chat id (must be negative);
 * second_bot_chat - same for the second project report;
+* refund_bot_chat - refund reports chat;
 * admin_telegram - developer's telegram id;
 * moderator_telegram - manager's telegram id;
 * allowed_users=123456,123457,123458... - telegram id whitelist for bot;
