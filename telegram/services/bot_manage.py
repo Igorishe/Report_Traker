@@ -11,9 +11,10 @@ load_dotenv()
 token = os.getenv('bot_token')
 rs_chat = int(os.getenv('bot_chat'))
 second_chat = int(os.getenv('second_bot_chat'))
+refund_chat = int(os.getenv('refund_bot_chat'))
 admin_id = int(os.getenv('admin_telegram'))
 
-allowed_chats = [rs_chat, second_chat]
+allowed_chats = [rs_chat, second_chat, refund_chat]
 allowed_users = [int(i) for i in os.getenv('allowed_users').split(',')]
 
 bot = telebot.TeleBot(token)
@@ -35,6 +36,7 @@ def admin_access_check(message):
 
 
 def check_func(message, urls, keyboard=None, filtered=None):
+    """Shows cases depends on the bot command"""
     current_url = urls[message.text]
     if filtered:
         sent = bot.send_message(
@@ -110,6 +112,7 @@ def post_report(message):
     urls = {
         f'{rs_chat}': 'reports',
         f'{second_chat}': 'mn-reports',
+        f'{refund_chat}': 'moneybacks',
     }
     current_chat = str(message.chat.id)
     current_url = urls[current_chat]

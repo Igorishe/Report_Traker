@@ -46,6 +46,7 @@ jobs:
           bot_token: ${{ secrets.BOT_TOKEN }}
           bot_chat: ${{ secrets.BOT_CHAT }}
           second_bot_chat: ${{ secrets.SECOND_BOT_CHAT }}
+          refund_bot_chat: ${{ secrets.REFUND_BOT_CHAT }}
           admin_telegram: ${{ secrets.ADMIN_TELEGRAM }}
           moderator_telegram: ${{ secrets.MODERATOR_TELEGRAM }}
           allowed_users: ${{ secrets.ALLOWED_USERS }}

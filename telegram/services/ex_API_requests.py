@@ -3,7 +3,8 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from .format_functions import format_result, format_to_save
+from .format_functions import (format_moneyback_to_save, format_result,
+                               format_to_save)
 
 load_dotenv()
 
@@ -51,7 +52,10 @@ def show_all(message, bot, current_url, filtered=None):
 
 def report_save(message, bot, current_url):
     """Post new report to Traker base"""
-    to_save = format_to_save(message)
+    if current_url in ['reports', 'mn-reports']:
+        to_save = format_to_save(message)
+    elif current_url == 'moneybacks':
+        to_save = [format_moneyback_to_save(message)]
     try:
         request = requests.post(
             url=f'http://{api_host}:{api_port}/api/v1/{current_url}/',
@@ -69,6 +73,11 @@ def report_save(message, bot, current_url):
             bot.send_message(
                 admin_id,
                 'Ошибка авторизации, проверьте токен',
+            )
+        elif request.status_code == 500:
+            bot.send_message(
+                admin_id,
+                f'Отправлены неверные данные: {to_save}',
             )
     except requests.exceptions.ConnectionError:
         bot.send_message(

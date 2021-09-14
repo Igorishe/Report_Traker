@@ -1,4 +1,4 @@
-from .parse_functions import parse_report
+from .parse_functions import parse_moneyback, parse_report
 
 tags_emoji = {
     'Normal': '\ud83c\udd97 ',
@@ -69,3 +69,11 @@ def format_to_save(message):
             obj_to_save['status'] = 'Closed'
         to_save.append(obj_to_save)
     return to_save
+
+
+def format_moneyback_to_save(message):
+    """Serialize refund object for POST request"""
+    moneyback = parse_moneyback(message.text)
+    moneyback['author'] = message.from_user.id
+    moneyback['author_name'] = message.from_user.username
+    return moneyback

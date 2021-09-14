@@ -82,6 +82,12 @@ class MobinetReport(ParentReport):
 
 
 class ParentMoneyback(ParentReport):
+    class Systems(models.TextChoices):
+        BITCOIN = 'Bitcoin'
+        ETHEREUM = 'Ethereum'
+        WEBMONEY = 'WebMoney'
+        QIWI = 'Qiwi'
+
     value = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -90,11 +96,16 @@ class ParentMoneyback(ParentReport):
     wallet = models.CharField(
         max_length=50,
         verbose_name='Кошелек получателя',
-        blank=True,
     )
     link = models.CharField(
         max_length=50,
         verbose_name='Ссылка на пользователя',
+    )
+    payment_system = models.CharField(
+        verbose_name='Платежная система',
+        max_length=20,
+        choices=Systems.choices,
+        default=Systems.BITCOIN,
     )
 
     class Meta:

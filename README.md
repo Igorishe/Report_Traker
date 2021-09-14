@@ -56,12 +56,10 @@ Following three commands will upload staticfiles and perform db migrations:
 
 
 #### Docker-compose starts seven containers
-1. Postgres database (container name: db);
-2. Redis as Celery message broker (container name: redis);
-3. Django app + gunicorn as wsgi (container name: web);
-4. TelegramBot (container name: bot);
-5. Nginx http server (container name: nginx);
-6. Celery worker (container name: celery);
-7. Celery beat (container name: celery-beat);
-
-
+1. Postgres database (container: db);
+2. Redis as Celery message broker (container: redis);
+3. Django app + gunicorn as wsgi (container: web);
+4. TelegramBot (container: bot);
+5. Nginx http server (container: nginx);
+6. Celery worker (container: celery);
+7. Celery beat (container: celery-beat);

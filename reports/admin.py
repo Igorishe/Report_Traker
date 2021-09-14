@@ -70,9 +70,14 @@ class MobinetReportAdmin(ReportAdmin):
 @admin.register(MoneyBack)
 class MoneyBackAdmin(ReportAdmin):
     list_display = (
-        'text', 'value', 'wallet', 'date', 'author', 'status', 'tag', 'link'
+        'text', 'value', 'payment_system', 'wallet', 'date', 'author_name',
+        'status', 'tag', 'link', 'last_edit'
     )
-    search_fields = ('status', 'tag', 'author', 'date', 'link')
+    search_fields = (
+        'status', 'tag', 'author_name', 'date', 'link',
+        'payment_system',
+    )
     list_filter = (
-        'author', 'date', 'status', 'tag', 'value', IsClosedListFilter
+        'author', 'date', 'status', 'tag', 'value', IsClosedListFilter,
+        'payment_system',
     )
