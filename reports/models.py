@@ -87,6 +87,8 @@ class ParentMoneyback(ParentReport):
         ETHEREUM = 'Ethereum'
         WEBMONEY = 'WebMoney'
         QIWI = 'Qiwi'
+        CREDITCARD = 'Card'
+        OTHER = 'Other'
 
     value = models.DecimalField(
         max_digits=10,

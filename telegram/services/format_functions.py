@@ -20,7 +20,7 @@ def decode_surrogates(string):
         'utf-16', 'surrogatepass')
 
 
-def format_result(result):
+def format_result(result, refund=None):
     """Format API response for telegram rendering"""
     output = ''
     for item in result:
@@ -33,14 +33,29 @@ def format_result(result):
         emoji = decode_surrogates(tags_emoji[response_tag])
         tag = emoji + response_tag
         author = item['author_name']
-        line = (
-            f'Кейс: {text}\n'
-            f'<code>Дата: {date}</code>\n'
-            f'Статус: <b>{status}</b>\n'
-            f'Тэг: <b>{tag}</b>\n'
-            f'Автор: @{author}\n'
-            '____________________________________\n'
-        )
+        if not refund:
+            line = (
+                f'Кейс: {text}\n'
+                f'<code>Дата: {date}</code>\n'
+                f'Статус: <b>{status}</b>\n'
+                f'Тэг: <b>{tag}</b>\n'
+                f'Автор: @{author}\n'
+                '____________________________________\n'
+            )
+        else:
+            wallet = item['wallet']
+            value = item['value']
+            link = item['link']
+            system = item['payment_system']
+            line = (
+                f'Описание: {text}\n'
+                f'<code>Дата: {date}</code>\n'
+                f'Кошелек: <b>{wallet}</b>\n'
+                f'Сумма: <b>{value}$</b>\n'
+                f'Ссылка: {link}\n'
+                f'Система: {system}\n'
+                '____________________________________\n'
+            )
         output += line
     if not output:
         return 'Эта категория пуста'

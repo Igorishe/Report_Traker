@@ -32,7 +32,10 @@ def show_all(message, bot, current_url, filtered=None):
         )
         if reports.status_code == 200:
             result = reports.json()
-            output = format_result(result)
+            if current_url in ['reports', 'mn-reports']:
+                output = format_result(result)
+            elif current_url == 'moneybacks':
+                output = format_result(result, refund=True)
             bot.send_message(
                 message.from_user.id,
                 output,

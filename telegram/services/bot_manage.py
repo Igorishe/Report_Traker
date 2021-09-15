@@ -68,6 +68,7 @@ def start(message):
         '<b>Привет! Все отчеты здесь!</b>\n\n'
         '/rs_all - все открытые отчеты по RS\n'
         '/mn_all - все открытые отчеты по MN\n'
+        '/refund_all - все открытые заявки на возврат по MN\n'
         '/status - фильтр по статусам\n'
         '/status_mn - фильтр по статусам MN\n'
         '/tags - фильтр по тэгам\n'
@@ -76,12 +77,14 @@ def start(message):
     )
 
 
-@bot.message_handler(func=user_access_check, commands=['rs_all', 'mn_all'])
+@bot.message_handler(func=user_access_check,
+                     commands=['rs_all', 'mn_all', 'refund_all'])
 def check_opened(message):
     """Shows all opened reports"""
     urls = {
         '/rs_all': 'reports',
-        '/mn_all': 'mn-reports'
+        '/mn_all': 'mn-reports',
+        '/refund_all': 'moneybacks'
     }
     check_func(message, urls)
 
