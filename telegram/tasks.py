@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from telebot.apihelper import send_message
 
-from reports.models import Report, MoneyBack
+from reports.models import MoneyBack, Report
 from traker.celery import app
 
 load_dotenv()
