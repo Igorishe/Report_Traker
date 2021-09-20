@@ -3,8 +3,8 @@ import os
 import telebot
 from dotenv import load_dotenv
 
-from .ex_API_requests import report_save, show_all
 from .keyboard_services import status_keyboard, tag_keyboard
+from .projects import Project
 
 load_dotenv()
 
@@ -13,11 +13,41 @@ rs_chat = int(os.getenv('bot_chat'))
 second_chat = int(os.getenv('second_bot_chat'))
 refund_chat = int(os.getenv('refund_bot_chat'))
 admin_id = int(os.getenv('admin_telegram'))
+api_token = os.getenv('api_token')
+api_host = os.getenv('api_host')
+api_port = '8000'
+
+default_api_config = {
+    'host': api_host,
+    'port': api_port,
+    'token': api_token
+}
 
 allowed_chats = [rs_chat, second_chat, refund_chat]
 allowed_users = [int(i) for i in os.getenv('allowed_users').split(',')]
 
 bot = telebot.TeleBot(token)
+
+RS_project = Project(
+    api_config=default_api_config,
+    chat=rs_chat,
+    endpoint='reports',
+)
+MN_project = Project(
+    api_config=default_api_config,
+    chat=second_chat,
+    endpoint='mn-reports',
+)
+objects = [RS_project, MN_project]
+
+bot_commands = {
+    '/rs_all': (RS_project, None, None),
+    '/mn_all': (MN_project, None, None),
+    '/status': (RS_project, 'status', status_keyboard()),
+    '/status_mn': (MN_project, 'status', status_keyboard()),
+    '/tags': (RS_project, 'tag', tag_keyboard()),
+    '/tags_mn': (MN_project, 'tag', tag_keyboard()),
+}
 
 
 def group_access_check(message):
@@ -33,22 +63,6 @@ def user_access_check(message):
 def admin_access_check(message):
     """Access to function only from admin user"""
     return message.from_user.id == admin_id
-
-
-def check_func(message, urls, keyboard=None, filtered=None):
-    """Shows cases depends on the bot command"""
-    current_url = urls[message.text]
-    if filtered:
-        sent = bot.send_message(
-            message.from_user.id,
-            'Какие кейсы показать?',
-            reply_markup=keyboard
-        )
-        bot.register_next_step_handler(
-            sent, show_all, bot, current_url, filtered=filtered
-        )
-    else:
-        show_all(message, bot, current_url)
 
 
 @bot.message_handler(func=admin_access_check, commands=['group'])
@@ -77,46 +91,43 @@ def start(message):
     )
 
 
-@bot.message_handler(func=user_access_check,
-                     commands=['rs_all', 'mn_all', 'refund_all'])
-def check_opened(message):
-    """Shows all opened reports"""
-    urls = {
-        '/rs_all': 'reports',
-        '/mn_all': 'mn-reports',
-        '/refund_all': 'moneybacks'
-    }
-    check_func(message, urls)
-
-
-@bot.message_handler(func=user_access_check, commands=['status', 'status_mn'])
-def check_status(message):
-    """Shows reports filtered by status"""
-    urls = {
-        '/status': 'reports',
-        '/status_mn': 'mn-reports'
-    }
-    check_func(message, urls, keyboard=status_keyboard(), filtered='status')
-
-
-@bot.message_handler(func=user_access_check, commands=['tags', 'tags_mn'])
-def check_tags(message):
-    """Shows reports filtered by tag"""
-    urls = {
-        '/tags': 'reports',
-        '/tags_mn': 'mn-reports'
-    }
-    check_func(message, urls, keyboard=tag_keyboard(), filtered='tag')
-
-
 @bot.message_handler(func=group_access_check, content_types=['text'])
 def post_report(message):
-    """Save new report"""
-    urls = {
-        f'{rs_chat}': 'reports',
-        f'{second_chat}': 'mn-reports',
-        f'{refund_chat}': 'moneybacks',
-    }
-    current_chat = str(message.chat.id)
-    current_url = urls[current_chat]
-    report_save(message, bot, current_url)
+    """Saves new report"""
+    project = [
+        obj for obj in objects if getattr(obj, 'chat') == message.chat.id
+    ][0]
+    response = project.save(message=message)
+    bot.send_message(
+        admin_id,
+        response
+    )
+
+
+@bot.message_handler(
+    func=user_access_check,
+    commands=[
+        'rs_all', 'mn_all', 'refund_all', 'status', 'status_mn',
+        'tags', 'tags_mn'
+    ]
+)
+def show_reports(message):
+    command = message.text
+    project, backend_filter, keyboard = bot_commands[command]
+    if backend_filter is not None:
+        reply_message = bot.send_message(
+            message.from_user.id,
+            'Какие кейсы показать?',
+            reply_markup=keyboard
+        )
+        response = project.show(
+            message=reply_message,
+            filter=backend_filter
+        )
+    else:
+        response = project.show(message=message)
+    bot.send_message(
+        message.from_user.id,
+        response,
+        parse_mode='HTML',
+    )
