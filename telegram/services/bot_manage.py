@@ -82,7 +82,7 @@ def show_group(message):
 
 @bot.message_handler(func=user_access_check, commands=['start', 'help'])
 def start(message):
-    """Greeting message with every command description"""
+    """Greeting with every command description"""
     bot.send_message(
         message.from_user.id,
         '<b>Привет! Все отчеты здесь!</b>\n\n'
@@ -110,14 +110,9 @@ def post_report(message):
     )
 
 
-@bot.message_handler(
-    func=user_access_check,
-    commands=[
-        'rs_all', 'mn_all', 'refund_all', 'status', 'status_mn',
-        'tags', 'tags_mn'
-    ]
-)
+@bot.message_handler(func=user_access_check, commands=[bot_commands.keys()])
 def show_reports(message):
+    """Show existing reports with or without filters"""
     command = message.text
     project, backend_filter, keyboard = bot_commands[command]
     if backend_filter is not None:
@@ -139,6 +134,7 @@ def show_reports(message):
 
 
 def show_with_filters(message, filter_type, proj_object):
+    """Next step handler for show_reports function"""
     response = proj_object.show(
         message=message,
         filter_type=filter_type

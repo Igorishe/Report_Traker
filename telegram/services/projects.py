@@ -12,9 +12,17 @@ class Project:
         self.chat = chat
         self.endpoint = endpoint
 
+    def format_for_save(self, message, *args, **kwargs):
+        """Serialize report objects for POST request"""
+        return format_to_save(message)
+
+    def format_for_show(self, result, *args, **kwargs):
+        """Format API response for telegram rendering"""
+        return format_result(result)
+
     def save(self, *args, **kwargs):
         """Saves project report to DB"""
-        to_save = format_to_save(kwargs.get('message'))
+        to_save = self.format_for_save(kwargs.get('message'))
         url = (f'http://{self.api_config["host"]}:'
                f'{self.api_config["port"]}/api/v1/{self.endpoint}/')
         headers = {
@@ -54,7 +62,7 @@ class Project:
                 headers=headers
             )
             if reports.status_code == 200:
-                output = format_result(reports.json())
+                output = self.format_for_show(reports.json())
                 return output
             elif reports.status_code == 401:
                 return 'Ошибка авторизации, проверьте токен'
@@ -65,7 +73,10 @@ class Project:
 class MoneybackProject(Project):
     """Project moneyback class referring to unique DB table"""
 
-    def save(self, *args, **kwargs):
-        """Saves moneyback report to DB"""
-        to_save = [format_moneyback_to_save(kwargs.get('message'))]
-        super().save(*args, **kwargs)
+    def format_for_save(self, message, *args, **kwargs):
+        """Serialize moneyback report object for POST request"""
+        return [format_moneyback_to_save(message)]
+
+    def format_for_show(self, result, *args, **kwargs):
+        """Format API response for telegram rendering"""
+        return format_result(result, refund=True)
