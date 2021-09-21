@@ -4,7 +4,7 @@ import telebot
 from dotenv import load_dotenv
 
 from .keyboard_services import status_keyboard, tag_keyboard
-from .projects import Project
+from .projects import Project, MoneybackProject
 
 load_dotenv()
 
@@ -38,11 +38,17 @@ MN_project = Project(
     chat=second_chat,
     endpoint='mn-reports',
 )
-objects = [RS_project, MN_project]
+RS_moneyback = MoneybackProject(
+    api_config=default_api_config,
+    chat=refund_chat,
+    endpoint='moneybacks',
+)
+objects = [RS_project, MN_project, RS_moneyback]
 
 bot_commands = {
     '/rs_all': (RS_project, None, None),
     '/mn_all': (MN_project, None, None),
+    '/refund_all': (RS_moneyback, None, None),
     '/status': (RS_project, 'status', status_keyboard()),
     '/status_mn': (MN_project, 'status', status_keyboard()),
     '/tags': (RS_project, 'tag', tag_keyboard()),
@@ -56,12 +62,12 @@ def group_access_check(message):
 
 
 def user_access_check(message):
-    """Access to function only from certain user"""
+    """Access to function only for certain users"""
     return message.from_user.id in allowed_users
 
 
 def admin_access_check(message):
-    """Access to function only from admin user"""
+    """Access to function only for admin user"""
     return message.from_user.id == admin_id
 
 
@@ -76,7 +82,7 @@ def show_group(message):
 
 @bot.message_handler(func=user_access_check, commands=['start', 'help'])
 def start(message):
-    """Greeting message"""
+    """Greeting message with every command description"""
     bot.send_message(
         message.from_user.id,
         '<b>Привет! Все отчеты здесь!</b>\n\n'
@@ -120,12 +126,23 @@ def show_reports(message):
             'Какие кейсы показать?',
             reply_markup=keyboard
         )
-        response = project.show(
-            message=reply_message,
-            filter=backend_filter
+        bot.register_next_step_handler(
+            reply_message, show_with_filters, backend_filter, project
         )
     else:
         response = project.show(message=message)
+        bot.send_message(
+            message.from_user.id,
+            response,
+            parse_mode='HTML',
+        )
+
+
+def show_with_filters(message, filter_type, proj_object):
+    response = proj_object.show(
+        message=message,
+        filter_type=filter_type
+    )
     bot.send_message(
         message.from_user.id,
         response,

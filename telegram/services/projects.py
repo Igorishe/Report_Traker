@@ -1,6 +1,7 @@
 import requests
 
-from .format_functions import format_to_save, format_result
+from .format_functions import (format_to_save, format_result,
+                               format_moneyback_to_save)
 
 
 class Project:
@@ -29,7 +30,7 @@ class Project:
                 return 'Отчет успешно записался'
             elif request.status_code == 401:
                 return 'Ошибка авторизации, проверьте токен'
-            elif request.status_code == 500:
+            elif request.status_code == 400:
                 return f'Отправлены неверные данные: {to_save}'
         except requests.exceptions.ConnectionError:
             return 'Ошибка соединения с сервером'
@@ -41,10 +42,9 @@ class Project:
         headers = {
             'Authorization': f'Token {self.api_config["token"]}',
         }
-        if 'filter' in kwargs:
+        if 'filter_type' in kwargs:
             report_status = str(kwargs.get('message').text).split()[1]
-            print(report_status)
-            filter_url = f'?{kwargs.get("filter")}={report_status}'
+            filter_url = f'?{kwargs.get("filter_type")}={report_status}'
             url = root_url + filter_url
         else:
             url = root_url
@@ -60,3 +60,12 @@ class Project:
                 return 'Ошибка авторизации, проверьте токен'
         except requests.exceptions.ConnectionError:
             return 'Ошибка соединения с сервером'
+
+
+class MoneybackProject(Project):
+    """Project moneyback class referring to unique DB table"""
+
+    def save(self, *args, **kwargs):
+        """Saves moneyback report to DB"""
+        to_save = [format_moneyback_to_save(kwargs.get('message'))]
+        super().save(*args, **kwargs)
