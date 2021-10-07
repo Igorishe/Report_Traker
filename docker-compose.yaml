@@ -8,6 +8,8 @@ services:
     env_file:
       - ./.env
   redis:
+    networks:
+      - traker-network
     image: redis
     restart: always
     container_name: 'redis'
@@ -71,6 +73,13 @@ services:
     depends_on:
       - web
       - redis
+networks:
+  traker-network:
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "172.21.0.1"
+    ipam:
+      config:
+        - subnet: "172.21.0.0/16"
 volumes:
   static_value:
   media_value:
