@@ -9,6 +9,7 @@ from .format_functions import (format_moneyback_to_save, format_result,
 load_dotenv()
 
 admin_id = int(os.getenv('admin_telegram'))
+moderator_id = int(os.getenv('moderator_telegram'))
 api_token = os.getenv('api_token')
 api_host = os.getenv('api_host')
 api_port = '8000'
@@ -69,7 +70,7 @@ def report_save(message, bot, current_url):
         )
         if request.status_code == 201:
             bot.send_message(
-                admin_id,
+                moderator_id,
                 'Отчет успешно записался',
             )
         elif request.status_code == 401:
@@ -79,7 +80,7 @@ def report_save(message, bot, current_url):
             )
         elif request.status_code == 500:
             bot.send_message(
-                admin_id,
+                moderator_id,
                 f'Отправлены неверные данные: {to_save}',
             )
     except requests.exceptions.ConnectionError:
